@@ -1,5 +1,9 @@
 # NodeJS MQTT Server for ESP8266 devices
 
+## Description
+
+MQTT broker using Aedes for NodeJS for managing NodeMCU esp8266 devices with google home integration and additional features.
+
 ## MQTT topics
 
 1.  Proxmox (client-id: NodeMCU-Proxmox)

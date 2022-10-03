@@ -51,5 +51,5 @@ export const updateMainLightGHState = async (state) => {
 };
 
 export const updateMainLightGHOnline = async (online) => {
-	await ProxmoxDoc.update({ 'states.online': online });
+	await MainLightDoc.update({ 'states.online': online });
 };

@@ -4,7 +4,7 @@ import { createServer } from 'aedes-server-factory';
 import mqtt from 'mqtt';
 import ProxmoxMessageHandler from './src/devices/proxmox.js';
 import MainLightMessageHandler from './src/devices/mainLight.js';
-import { updateProxmoxGHOnline } from './src/googleHome/googleHome.js';
+import { updateMainLightGHOnline, updateProxmoxGHOnline } from './src/googleHome/googleHome.js';
 
 dotenv.config();
 
@@ -58,7 +58,12 @@ MqttServClient.on('message', (topic, payload) => {
 aedes.on('clientDisconnect', (client) => {
 	switch (client.id) {
 		case 'NodeMCU-Proxmox':
+			console.log('Proxmox disconnected');
 			updateProxmoxGHOnline(false);
+			break;
+		case 'NodeMCU-MainLight':
+			console.log('MainLight disconnected');
+			updateMainLightGHOnline(false);
 			break;
 	}
 });

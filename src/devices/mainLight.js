@@ -26,14 +26,10 @@ export const MainLightGHHandler = (state, brightness) => {
 			for (let i = 0; i < 50; i++) {
 				setTimeout(() => {
 					MqttServClient.publish('main-light/control', 'brightness-up');
-				}, 200);
+				}, 500);
 			}
 		} else {
-			for (let i = 0; i < 50; i++) {
-				setTimeout(() => {
-					MqttServClient.publish('main-light/control', 'brightness-down');
-				}, 200);
-			}
+			MqttServClient.publish('main-light/control', 'night-mode');
 		}
 	}
 };

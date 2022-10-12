@@ -34,9 +34,14 @@ const ProxmoxMessageHandler = async (topic, message) => {
 	}
 };
 
+let prevStateProxmox = false;
 export const ProxmoxGHHandler = (state) => {
-	if (state) {
-		MqttServClient.publish('proxmox/on', 'power');
+	if (state !== prevStateProxmox) {
+		console.log(`Firebase Proxmox State: ${state}`);
+		prevStateProxmox = state;
+		if (state) {
+			MqttServClient.publish('proxmox/on', 'power');
+		}
 	}
 };
 

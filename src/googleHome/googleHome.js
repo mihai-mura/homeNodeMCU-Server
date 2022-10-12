@@ -18,7 +18,6 @@ const ProxmoxDoc = db.collection('users').doc('mihai').collection('devices').doc
 ProxmoxDoc.onSnapshot(
 	(docSnapshot) => {
 		const state = docSnapshot.data()?.states?.on;
-		console.log(`Firebase Proxmox State: ${state}`);
 		ProxmoxGHHandler(state);
 	},
 	(err) => {
@@ -38,8 +37,8 @@ export const updateProxmoxGHOnline = async (status) => {
 MainLightDoc.onSnapshot(
 	(docSnapshot) => {
 		const state = docSnapshot.data()?.states?.on;
-		console.log(`Firebase MainLight State: ${state}`);
-		MainLightGHHandler(state);
+		const brightness = docSnapshot.data()?.states?.brightness;
+		MainLightGHHandler(state, brightness);
 	},
 	(err) => {
 		console.log(`Firebase encountered error: ${err}`);

@@ -50,11 +50,5 @@ export const updateMainLightGHState = async (state) => {
 };
 
 export const updateMainLightGHOnline = async (online) => {
-	//if light is off and goes offline, turn it on for next time
-	const doc = await MainLightDoc.get();
-	const state = doc.data()?.states?.on;
-	if (!online && !state) {
-		await MainLightDoc.update({ 'states.on': true });
-	}
 	await MainLightDoc.update({ 'states.online': online });
 };

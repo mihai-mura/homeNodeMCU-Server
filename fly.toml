@@ -11,8 +11,8 @@ processes = []
 [build.args]
   MODE="production"
   NODE_ENV="production"
-  NPM_CONFIG_PRODUCTION=true
-  USE_NPM_INSTALL=true
+  # NPM_CONFIG_PRODUCTION=true
+  # USE_NPM_INSTALL=true
 
 [env]
   MQTT_PORT = "1883"

@@ -1,10 +1,10 @@
-import dotenv from 'dotenv';
-import Aedes from 'aedes';
-import { createServer } from 'aedes-server-factory';
-import mqtt from 'mqtt';
-import ProxmoxMessageHandler from './src/devices/proxmox.js';
-import MainLightMessageHandler from './src/devices/mainLight.js';
-import { updateMainLightGHOnline, updateProxmoxGHOnline } from './src/googleHome/googleHome.js';
+import Aedes from "aedes";
+import { createServer } from "aedes-server-factory";
+import dotenv from "dotenv";
+import mqtt from "mqtt";
+import MainLightMessageHandler from "./src/devices/mainLight.js";
+import ProxmoxMessageHandler from "./src/devices/proxmox.js";
+import { updateMainLightGHOnline, updateProxmoxGHOnline } from "./src/googleHome/googleHome.js";
 
 dotenv.config();
 
@@ -13,15 +13,15 @@ const aedes = new Aedes();
 
 aedes.authenticate = (client, username, password, callback) => {
 	if (password) {
-		password = Buffer.from(password, 'base64').toString();
+		password = Buffer.from(password, "base64").toString();
 		if (username === process.env.MQTT_USERNAME && password === process.env.MQTT_PASSWORD) {
 			return callback(null, true);
 		}
-		const error = new Error('Authentication Failed!! Invalid user credentials.');
-		console.log('Error ! Authentication failed.');
+		const error = new Error("Authentication Failed!! Invalid user credentials.");
+		console.log("Error ! Authentication failed.");
 		return callback(error, false);
 	} else {
-		const error = new Error('No password provided!');
+		const error = new Error("No password provided!");
 		return callback(error, false);
 	}
 };
@@ -42,27 +42,28 @@ export const MqttServClient = mqtt.connect(`mqtt://localhost:${process.env.MQTT_
 	password: process.env.MQTT_PASSWORD,
 });
 
-MqttServClient.on('connect', () => {
-	MqttServClient.subscribe('proxmox/#');
-	MqttServClient.subscribe('main-light/#');
+MqttServClient.on("connect", () => {
+	console.log("server's mqtt client connected");
+	MqttServClient.subscribe("proxmox/#");
+	MqttServClient.subscribe("main-light/#");
 });
 
-MqttServClient.on('message', (topic, payload) => {
-	if (topic.includes('proxmox')) {
+MqttServClient.on("message", (topic, payload) => {
+	if (topic.includes("proxmox")) {
 		ProxmoxMessageHandler(topic, payload.toString());
-	} else if (topic.includes('main-light')) {
+	} else if (topic.includes("main-light")) {
 		MainLightMessageHandler(topic, payload.toString());
 	}
 });
 
-aedes.on('clientDisconnect', (client) => {
+aedes.on("clientDisconnect", client => {
 	switch (client.id) {
-		case 'NodeMCU-Proxmox':
-			console.log('Proxmox disconnected');
+		case "NodeMCU-Proxmox":
+			console.log("Proxmox disconnected");
 			updateProxmoxGHOnline(false);
 			break;
-		case 'NodeMCU-MainLight':
-			console.log('MainLight disconnected');
+		case "NodeMCU-MainLight":
+			console.log("MainLight disconnected");
 			updateMainLightGHOnline(false);
 			break;
 	}

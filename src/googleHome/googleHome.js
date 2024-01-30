@@ -3,10 +3,11 @@ import { cert, initializeApp } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import { MainLightGHHandler } from "../devices/mainLight.js";
 import { ProxmoxGHHandler } from "../devices/proxmox.js";
+import ServiceAccount from "./home-d2c4b-firebase-adminsdk-1dq33-07cc2c5425.json" assert { type: "json" };
 
 dotenv.config();
 
-initializeApp({ credential: cert("./home-d2c4b-firebase-adminsdk-1dq33-07cc2c5425.json") });
+initializeApp({ credential: cert(ServiceAccount) });
 const db = getFirestore();
 
 const MainLightDoc = db.collection("users").doc("mihai").collection("devices").doc("1vu4");
